@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#122B20"/>
+  <text x="256" y="285" text-anchor="middle"
+        font-family="Zodiak, Georgia, 'Times New Roman', serif"
+        font-size="216" font-weight="600" fill="#F2EDE0">SE</text>
+  <path d="M132 338 C 180 328, 232 344, 288 334 S 340 331, 380 339"
+        fill="none" stroke="#D9B461" stroke-width="14" stroke-linecap="round"/>
+</svg>
