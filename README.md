@@ -1,2 +1,48 @@
-# smart-education-website
-Official website for Smart Education Asansol, featuring student, teacher, and admin portals, coaching details, and computer courses.
+# Smart Education Website & Portals
+
+The official web platform and portal system for **Smart Education Computer Centre**, located in Kanyapur, Asansol. This project provides coaching information (Class I-XII, NEET & JEE preparation), professional job-ready computer courses, and portal access dashboards for Students, Teachers, and Administrators.
+
+---
+
+## 🌟 Features
+
+- **Multi-Role Portals:** Custom user interfaces designed specifically for:
+  - **Students (`student.html`):** Access to classes, marks, profiles, and fee schedules.
+  - **Teachers (`teacher.html`):** Management tools for student lists, progress tracking, and attendance.
+  - **Administrators (`admin.html`):** Management panel for overseeing center operations, metrics, and accounts.
+- **Multilingual Support (`translate.js`):** Built-in support for **English**, **Bengali (বাংলা)**, and **Hindi (हिन्दी)** using a custom-styled wrapper around the Google Translate widget that persists preferences site-wide via cookies.
+- **Theme System (`theme.js`):** Support for dark/light mode toggle with seamless state persistence.
+- **Modern UI & Aesthetic:** Built with premium typography (Zodiak & General Sans), grain overlay texture, self-drawing hand-drawn underlines for emphasis, and smooth double-bezel layouts.
+- **Responsive Layouts:** Designed to adapt beautifully to desktops, tablets, and mobile devices.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Core:** HTML5, CSS3 (Vanilla), and JavaScript (ES6+).
+- **Typography:** General Sans (Sans-serif) & Zodiak (Serif) via Fontshare.
+- **Icons:** SVG assets (housed in `icon.svg` / assets).
+- **Localization:** Google Translate API Widget integration.
+
+---
+
+## 📁 Repository Structure
+
+```text
+├── index.html            # Main home page for Smart Education Centre
+├── login.html            # Unified portal authentication page
+├── accounts.html         # Accounts portal page
+├── student.html          # Student dashboard & profile portal
+├── teacher.html          # Teacher panel & student management portal
+├── admin.html            # Admin dashboard for operational metrics
+├── 404.html              # Custom elegant 404 page
+├── portal.js             # Shared behaviors for dashboards & rails
+├── translate.js          # Client-side English/Bengali/Hindi translation engine
+├── theme.js              # Site-wide dark & light theme management
+├── portal.css            # Layout styles for dashboard & UI tokens
+├── manifest.webmanifest  # Progressive web app (PWA) configuration
+├── icon.svg              # Core icon SVG asset
+└── assets/               # Local images, logos, and stylesheets
+```
+
+---
