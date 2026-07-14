@@ -112,7 +112,7 @@ img{display:block;max-width:100%}
 .v-quote{
   font-family:var(--serif);font-weight:500;
   font-size:clamp(1.5rem,2vw,1.9rem);line-height:1.25;letter-spacing:-.01em;
-  max-width:26ch;text-wrap:balance;
+  max-width:26ch;text-wrap:balance;text-indent:-.5em;
 }
 .v-quote::before{content:'“';color:var(--gold-bright)}
 .v-quote::after{content:'”';color:var(--gold-bright)}
@@ -284,7 +284,7 @@ img{display:block;max-width:100%}
   .panel{opacity:1;transform:none}
 }
 </style>
-<script src="translate.js"></script>
+<script defer src="translate.js"></script>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -302,7 +302,7 @@ img{display:block;max-width:100%}
     <div class="panel-core">
 
       <aside class="visual">
-        <img class="ph" src="assets/photos/certificates-day.jpeg" alt="Students and teachers with NBCE certificates">
+        <img class="ph" src="assets/photos/certificates-day.jpeg" alt="Students and teachers with NBCE certificates" fetchpriority="high" decoding="async">
         <div class="v-body">
           <span class="v-chip">NBCE Golden Centre · 2025 &amp; 2026</span>
           <p class="v-quote">Arise, awake, and stop not till the goal is reached.</p>

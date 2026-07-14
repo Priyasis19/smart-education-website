@@ -96,7 +96,7 @@ body{--maxw:1160px}
   .st-seg{width:100%}
 }
 </style>
-<script src="translate.js"></script>
+<script defer src="translate.js"></script>
 </head>
 <body>
 
@@ -649,6 +649,36 @@ body{--maxw:1160px}
   try{uid=localStorage.getItem('se-user-id');role=localStorage.getItem('se-role');}catch(e){}
   if(role==='admin'&&uid){
     document.getElementById('lgSub').textContent='Signed in as '+uid+' · Thursday, 9 July 2026';
+  }
+
+  /* ---- Dashboard KPIs count up on first view ---- */
+  var reduceMotion=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function countUp(el){
+    if(!el||el.dataset.counted)return;
+    el.dataset.counted='1';
+    var raw=el.textContent.trim(),m=raw.match(/^(\D*)(\d[\d,]*)(.*)$/);
+    if(!m)return;
+    var prefix=m[1],digits=m[2].replace(/,/g,''),suffix=m[3],
+        target=parseInt(digits,10),
+        pad=(digits.length>1&&digits.charAt(0)==='0')?digits.length:0;
+    if(reduceMotion||!target){el.textContent=raw;return;}
+    var dur=Math.max(500,Math.min(1100,450+target*4)),t0=null;
+    function step(now){
+      if(t0===null)t0=now;
+      var p=Math.min((now-t0)/dur,1),v=Math.round((1-Math.pow(1-p,3))*target),s=''+v;
+      while(s.length<pad)s='0'+s;
+      el.textContent=prefix+s+suffix;
+      if(p<1)requestAnimationFrame(step); else el.textContent=raw;
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var so=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){countUp(e.target);so.unobserve(e.target);} });
+    },{threshold:.6});
+    document.querySelectorAll('.stat-num').forEach(function(el){so.observe(el);});
+  }else{
+    document.querySelectorAll('.stat-num').forEach(countUp);
   }
 
   /* ---- Interactive charts (hover / focus / tap tooltips) ---- */

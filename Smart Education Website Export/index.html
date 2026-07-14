@@ -194,7 +194,9 @@ section{scroll-margin-top:120px}
 .burger{
   width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
   background:rgba(255,255,255,.6);cursor:pointer;position:relative;flex:none;
+  transition:transform .12s var(--ease-out);
 }
+.burger:active{transform:scale(.94)}
 .burger span{
   position:absolute;left:50%;top:50%;width:17px;height:1.6px;border-radius:2px;
   background:var(--ink);transition:transform .55s var(--ease);
@@ -251,6 +253,7 @@ section{scroll-margin-top:120px}
   font-family:var(--serif);font-weight:500;
   font-size:clamp(2rem,3.9vw,3.35rem);
   line-height:1.09;letter-spacing:-.02em;color:var(--ink);text-wrap:balance;
+  text-indent:-.5em;  /* hang the opening “ into the margin, keep the text edge straight */
 }
 .q-item blockquote::before{content:'“';color:var(--gold)}
 .q-item blockquote::after{content:'”';color:var(--gold)}
@@ -274,7 +277,7 @@ section{scroll-margin-top:120px}
 }
 .stat{padding:6px 22px;border-left:1px solid var(--line)}
 .stat:first-child{border-left:none;padding-left:0}
-.stat b{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,2.4vw,2.3rem);letter-spacing:-.01em;display:block;line-height:1.15;color:var(--ink)}
+.stat b{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,2.4vw,2.3rem);letter-spacing:-.01em;display:block;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
 .stat span{font-size:12.5px;font-weight:500;color:var(--muted);letter-spacing:.02em}
 
 .hero-visual{position:relative}
@@ -328,6 +331,7 @@ section{scroll-margin-top:120px}
   overflow:hidden;padding:15px 0;
 }
 .mq-track{display:flex;gap:0;width:max-content;animation:mq 36s linear infinite}
+@media (hover:hover) and (pointer:fine){.mq-track:hover{animation-play-state:paused}}
 .mq-seq{display:flex;align-items:center;flex:none}
 .mq-seq span{
   font-family:var(--serif);font-weight:400;font-size:15.5px;letter-spacing:.06em;
@@ -574,10 +578,11 @@ footer h4{
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 14px 34px -14px rgba(34,30,21,.4);
   opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;
-  transition:opacity .6s var(--ease),transform .6s var(--ease);
+  transition:opacity .4s var(--ease),transform .28s var(--ease-out);
 }
 .to-top.show{opacity:1;transform:none;pointer-events:auto}
 .to-top:hover{background:var(--ink);color:var(--cream)}
+.to-top:active{transform:scale(.92)}
 
 /* ============ WHATSAPP ============ */
 .btn-wa{background:var(--wa);color:var(--wa-ink)}
@@ -720,7 +725,7 @@ footer h4{
   .h2.rv em::after{background-size:100% 100%}
 }
 </style>
-<script src="translate.js"></script>
+<script defer src="translate.js"></script>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -1292,7 +1297,7 @@ footer h4{
   <div class="wrap">
     <div class="f-grid">
       <div class="f-brand">
-        <span class="lg"><img src="assets/logo.jpeg" alt="Smart Education logo"><b>Smart Education</b></span>
+        <span class="lg"><img src="assets/logo.jpeg" alt="Smart Education logo" loading="lazy" decoding="async" width="44" height="44"><b>Smart Education</b></span>
         <p>Coaching for Class I–XII, NEET &amp; JEE aspirants, and job-ready computer courses in Kanyapur, Asansol.</p>
       </div>
       <div>
@@ -1345,6 +1350,29 @@ footer h4{
 (function(){
   'use strict';
   var d=document;
+  var reduceMotion=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* Count a number up to its printed value once, preserving any prefix/suffix
+     ("92%+", "2×") and leading zeros ("08"). Reduced motion shows it instantly. */
+  function countUp(el){
+    if(!el||el.dataset.counted)return;
+    el.dataset.counted='1';
+    var raw=el.textContent.trim(),m=raw.match(/^(\D*)(\d[\d,]*)(.*)$/);
+    if(!m)return;
+    var prefix=m[1],digits=m[2].replace(/,/g,''),suffix=m[3],
+        target=parseInt(digits,10),
+        pad=(digits.length>1&&digits.charAt(0)==='0')?digits.length:0;
+    if(reduceMotion||!target){el.textContent=raw;return;}
+    var dur=Math.max(500,Math.min(1100,450+target*7)),t0=null;
+    function step(now){
+      if(t0===null)t0=now;
+      var p=Math.min((now-t0)/dur,1),v=Math.round((1-Math.pow(1-p,3))*target),s=''+v;
+      while(s.length<pad)s='0'+s;
+      el.textContent=prefix+s+suffix;
+      if(p<1)requestAnimationFrame(step); else el.textContent=raw;
+    }
+    requestAnimationFrame(step);
+  }
 
   /* ---- Scroll reveals ---- */
   var io=new IntersectionObserver(function(entries){
@@ -1353,6 +1381,7 @@ footer h4{
       var t=e.target;
       t.style.willChange='opacity, transform, filter';   /* promote layer for the reveal only */
       t.classList.add('in');
+      if(t.classList.contains('stat'))countUp(t.querySelector('b'));
       var released=false;
       function release(){                                  /* release the layer once settled */
         if(released)return; released=true;
